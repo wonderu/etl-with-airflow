@@ -14,7 +14,8 @@
 
 from __future__ import print_function
 import airflow
-from datetime import datetime, timedelta
+import pendulum
+from datetime import timedelta
 from acme.operators.dwh_operators import PostgresToPostgresOperator
 from acme.operators.dwh_operators import AuditOperator
 from airflow.models import Variable
@@ -22,7 +23,7 @@ from airflow.models import Variable
 
 args = {
     'owner': 'airflow',
-    'start_date': airflow.utils.dates.days_ago(7),
+    'start_date': pendulum.today('UTC').add(days=-7),
     'provide_context': True
 }
 

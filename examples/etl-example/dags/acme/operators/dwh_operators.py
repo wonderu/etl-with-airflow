@@ -40,7 +40,7 @@ class PostgresToPostgresOperator(BaseOperator):
     template_ext = ('.sql',)
     ui_color = '#ededed'
 
-    @apply_defaults
+    #@apply_defaults
     def __init__(
             self,
             sql,
@@ -101,7 +101,7 @@ class PostgresOperatorWithTemplatedParams(BaseOperator):
     template_ext = ('.sql',)
     ui_color = '#ededed'
 
-    @apply_defaults
+    #@apply_defaults
     def __init__(
             self, sql,
             postgres_conn_id='postgres_default', autocommit=False,
@@ -135,7 +135,7 @@ class AuditOperator(BaseOperator):
     template_fields = ('audit_key', 'cycle_dtm')
     ui_color = '#ededed'
 
-    @apply_defaults
+    #@apply_defaults
     def __init__(
             self,
             postgres_conn_id='postgres_default',

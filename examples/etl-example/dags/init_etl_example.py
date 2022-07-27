@@ -14,8 +14,8 @@
 
 from __future__ import print_function
 import airflow
-from datetime import datetime, timedelta
-from airflow.operators.python_operator import PythonOperator
+import pendulum
+from airflow.operators.python import PythonOperator
 from airflow import models
 from airflow.settings import Session
 import logging
@@ -23,7 +23,7 @@ import logging
 
 args = {
     'owner': 'airflow',
-    'start_date': airflow.utils.dates.days_ago(7),
+    'start_date': pendulum.today('UTC').add(days=-7),
     'provide_context': True
 }
 
@@ -49,7 +49,7 @@ def initialize_etl_example():
     create_new_conn(session,
                     {"conn_id": "postgres_oltp",
                      "conn_type": "postgres",
-                     "host": "postgres",
+                     "host": "localhost",
                      "port": 5432,
                      "schema": "orders",
                      "login": "oltp_read",
@@ -58,7 +58,7 @@ def initialize_etl_example():
     create_new_conn(session,
                     {"conn_id": "postgres_dwh",
                      "conn_type": "postgres",
-                     "host": "postgres",
+                     "host": "localhost",
                      "port": 5432,
                      "schema": "dwh",
                      "login": "dwh_svc_account",
@@ -66,7 +66,7 @@ def initialize_etl_example():
 
     new_var = models.Variable()
     new_var.key = "sql_path"
-    new_var.set_val("/usr/local/airflow/sql")
+    new_var.set_val("/home/ubuntu/airflow/dags/sql")
     session.add(new_var)
     session.commit()
 
@@ -88,5 +88,5 @@ dag = airflow.DAG(
 
 t1 = PythonOperator(task_id='initialize_etl_example',
                     python_callable=initialize_etl_example,
-                    provide_context=False,
+                    #provide_context=False,
                     dag=dag)
